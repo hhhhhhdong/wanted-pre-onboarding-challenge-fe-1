@@ -1,12 +1,22 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from 'axios'
 import styled from "styled-components";
 import Page from "../components/common/Page";
 import Input from "../components/common/Input";
-import { useState } from "react";
-import axios from 'axios'
 
 function Login() {
+  let navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [validation, setValidation] = useState(true)
+
+  useEffect(() => {
+    if(email.length < 0 || password.length < 8) return
+    if(!email.includes('@') || !email.includes('.')) return
+    setValidation(false)
+  }, [email, password])
+
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
   };
@@ -16,9 +26,12 @@ function Login() {
   };
 
   const onClickLogin = () => {
-    console.log(email, password)
     axios.post('http://localhost:8080/users/login', {email, password}).then(res => {
-      console.log(res)
+      if(res.status === 200) {
+        const token = res.data.token
+        localStorage.setItem('token', token)
+        navigate('/')
+      }
     })
   }
 
@@ -32,7 +45,7 @@ function Login() {
           value={password}
           onChange={onChangePassword}
         />
-        <button onClick={onClickLogin}>login</button>
+        <button onClick={onClickLogin} disabled={validation}>Login</button>
       </Wrapper>
     </Page>
   );
