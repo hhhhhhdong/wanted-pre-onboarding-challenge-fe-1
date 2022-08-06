@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Page from "../components/common/Page";
 import Input from "../components/common/Input";
 import { useState } from "react";
+import axios from 'axios'
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -14,6 +15,13 @@ function Login() {
     setPassword(e.target.value);
   };
 
+  const onClickLogin = () => {
+    console.log(email, password)
+    axios.post('http://localhost:8080/users/login', {email, password}).then(res => {
+      console.log(res)
+    })
+  }
+
   return (
     <Page title="Login">
       <Wrapper>
@@ -24,6 +32,7 @@ function Login() {
           value={password}
           onChange={onChangePassword}
         />
+        <button onClick={onClickLogin}>login</button>
       </Wrapper>
     </Page>
   );
