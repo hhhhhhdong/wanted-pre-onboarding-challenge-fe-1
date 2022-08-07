@@ -6,6 +6,7 @@ function Header({ title }) {
 
 const Wrapper = styled.h2`
   text-align: center;
+  padding-bottom: 20px;
 `;
 
 export default Header;

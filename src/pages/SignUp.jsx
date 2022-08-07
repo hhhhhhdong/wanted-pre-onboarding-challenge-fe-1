@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import axios from 'axios'
+import axios from "axios";
 import Page from "../components/common/Page";
 import Input from "../components/common/Input";
 
@@ -9,13 +9,13 @@ function SignUp() {
   let navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [validation, setValidation] = useState(true)
+  const [validation, setValidation] = useState(true);
 
   useEffect(() => {
-    if(email.length < 0 || password.length < 8) return
-    if(!email.includes('@') || !email.includes('.')) return
-    setValidation(false)
-  }, [email, password])
+    if (email.length < 0 || password.length < 8) return;
+    if (!email.includes("@") || !email.includes(".")) return;
+    setValidation(false);
+  }, [email, password]);
 
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -26,13 +26,18 @@ function SignUp() {
   };
 
   const onClickSignUp = () => {
-    axios.post('http://localhost:8080/users/create', {email, password}).then(res => {
-      if(res.status === 200) {
-        alert('회원가입에 성공했습니다.')
-        navigate('/login')
-      }
-    })
-  }
+    axios
+      .post("http://localhost:8080/users/create", { email, password })
+      .then((res) => {
+        if (res.status === 200) {
+          alert("회원가입에 성공했습니다.");
+          navigate("/login");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <Page title="SignUp">
@@ -44,7 +49,9 @@ function SignUp() {
           value={password}
           onChange={onChangePassword}
         />
-        <button onClick={onClickSignUp} disabled={validation}>SignUp</button>
+        <button onClick={onClickSignUp} disabled={validation}>
+          SignUp
+        </button>
       </Wrapper>
     </Page>
   );
